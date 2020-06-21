@@ -1,1 +1,38 @@
 
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+  application:
+    name: market-service
+
+zuul:
+  host:
+    socket-timeout-millis: 60000
+    connect-timeout-millis: 60000
+  semaphore:
+    max-semaphores: 500
+  sensitive-headers: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+server:
+  port: 8082
+
+management:
+  endpoint:
+    info:
+      enabled: true
+    shutdown:
+      enabled: true

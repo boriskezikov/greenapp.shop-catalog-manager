@@ -3,17 +3,15 @@ package com.greenapp.shopcatalogmanager.domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
-import java.math.BigInteger;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 @Data
 @Builder
@@ -22,6 +20,7 @@ import java.security.Timestamp;
 @Entity(name = "RewardItem")
 public class RewardItem implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private String title;
@@ -35,4 +34,6 @@ public class RewardItem implements Serializable {
     private String description;
     @Column
     private Long price;
+    @Column
+    private byte[] headerPhoto;
 }
