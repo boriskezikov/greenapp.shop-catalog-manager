@@ -1,5 +1,6 @@
 package com.greenapp.shopcatalogmanager.service;
 
+import com.greenapp.shopcatalogmanager.configuration.ItemNotFoundException;
 import com.greenapp.shopcatalogmanager.domain.Attachment;
 import com.greenapp.shopcatalogmanager.domain.RewardItem;
 import com.greenapp.shopcatalogmanager.dto.RewardItemDTO;
@@ -38,6 +39,11 @@ public class RewardsService {
                 .headerPhoto(dto.getContent())
                 .build();
         return ResponseEntity.ok(rewardsRepository.save(instance));
+    }
+
+    @Async
+    public CompletableFuture<RewardItem> loadItemById(Long itemId){
+        return CompletableFuture.completedFuture(rewardsRepository.findById(itemId).orElseThrow(ItemNotFoundException::new));
     }
 
 }

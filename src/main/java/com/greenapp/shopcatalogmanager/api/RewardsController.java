@@ -5,7 +5,9 @@ import com.greenapp.shopcatalogmanager.dto.RewardItemDTO;
 import com.greenapp.shopcatalogmanager.service.RewardsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,7 @@ public class RewardsController {
 
     private final RewardsService service;
 
+    @Async
     @GetMapping("load/all")
     public CompletableFuture<List<RewardItem>> loadShop(){
         return service.loadAllItems();
@@ -31,4 +34,12 @@ public class RewardsController {
     public ResponseEntity<RewardItem> createNewRewardItem(@Valid @RequestBody RewardItemDTO dto){
         return service.createRewardItem(dto);
     }
+
+    @Async
+    @GetMapping("load/item/{itemId}")
+    public CompletableFuture<RewardItem> loadItemById(@PathVariable Long itemId){
+        return service.loadItemById(itemId);
+    }
+
+
 }
