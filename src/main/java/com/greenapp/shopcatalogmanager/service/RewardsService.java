@@ -1,8 +1,8 @@
 package com.greenapp.shopcatalogmanager.service;
 
 import com.greenapp.shopcatalogmanager.configuration.ItemNotFoundException;
-import com.greenapp.shopcatalogmanager.domain.Attachment;
 import com.greenapp.shopcatalogmanager.domain.RewardItem;
+import com.greenapp.shopcatalogmanager.dto.FilterDTO;
 import com.greenapp.shopcatalogmanager.dto.RewardItemDTO;
 import com.greenapp.shopcatalogmanager.repository.RewardRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.sql.Time;
+
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,4 +46,10 @@ public class RewardsService {
         return CompletableFuture.completedFuture(rewardsRepository.findById(itemId).orElseThrow(ItemNotFoundException::new));
     }
 
+    @Async
+    public CompletableFuture<List<RewardItem>> filterCreatedDate(FilterDTO dto){
+        return CompletableFuture.completedFuture(
+                rewardsRepository.findAllByCreatedWhen(dto.getCreatedWhen())
+                .orElseThrow(ItemNotFoundException::new));
+    }
 }

@@ -1,6 +1,7 @@
 package com.greenapp.shopcatalogmanager.api;
 
 import com.greenapp.shopcatalogmanager.domain.RewardItem;
+import com.greenapp.shopcatalogmanager.dto.FilterDTO;
 import com.greenapp.shopcatalogmanager.dto.RewardItemDTO;
 import com.greenapp.shopcatalogmanager.service.RewardsService;
 import lombok.RequiredArgsConstructor;
@@ -41,5 +42,10 @@ public class RewardsController {
         return service.loadItemById(itemId);
     }
 
+    @Async
+    @PostMapping("load/filter")
+    public CompletableFuture<List<RewardItem>> loadItemsByFilter(@RequestBody FilterDTO filter){
+        return service.filterCreatedDate(filter);
+    }
 
 }
