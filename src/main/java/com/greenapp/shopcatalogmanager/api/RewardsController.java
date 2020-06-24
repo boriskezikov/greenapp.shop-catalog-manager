@@ -20,7 +20,7 @@ import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("rewards/")
+@RequestMapping("shop/")
 public class RewardsController {
 
     private final RewardsService service;
