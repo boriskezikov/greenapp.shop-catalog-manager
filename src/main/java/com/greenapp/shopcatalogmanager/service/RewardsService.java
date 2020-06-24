@@ -95,9 +95,7 @@ public class RewardsService {
         rewardsRepository.findById(rewardId)
                 .ifPresent(rewardItem -> {
                     rewardItem.setStatus(status);
-
                     rewardsRepository.save(rewardItem);
                 });
     }
-
 }
