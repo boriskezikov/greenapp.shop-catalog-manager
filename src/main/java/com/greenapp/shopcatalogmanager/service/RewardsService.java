@@ -41,7 +41,6 @@ public class RewardsService {
                 .lastUpdated(Timestamp.valueOf(now))
                 .createdBy(dto.getCreatedBy())
                 .title(dto.getTitle())
-                .headerPhoto(dto.getContent())
                 .build();
         LOG.info("Company {} added new reward item with title:{} and price:{}", dto.getCreatedBy(), dto.getTitle(), dto.getPrice());
         return ResponseEntity.ok(rewardsRepository.save(instance));
@@ -69,7 +68,6 @@ public class RewardsService {
                     item.setLastUpdated(Timestamp.valueOf(LocalDateTime.now()));
                     item.setDescription(dto.getDescription());
                     item.setPrice(dto.getPrice());
-                    item.setHeaderPhoto(dto.getContent());
                     item.setTitle(dto.getTitle());
                     return item;
                 }).map(rewardsRepository::save)
