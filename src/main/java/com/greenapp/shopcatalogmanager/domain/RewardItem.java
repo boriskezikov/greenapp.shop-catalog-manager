@@ -17,7 +17,7 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "RewardItem")
+@Entity(name = "RewardItems")
 public class RewardItem implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class RewardItem implements Serializable {
     @Column
     private String title;
     @Column
-    private String createdBy;
+    private Long createdBy;
     @Column
     private Timestamp createdWhen;
     @Column

@@ -2,6 +2,7 @@ package com.greenapp.shopcatalogmanager.repository;
 
 import com.greenapp.shopcatalogmanager.domain.RewardItem;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Time;
@@ -13,5 +14,11 @@ import java.util.Optional;
 public interface RewardRepository extends JpaRepository<RewardItem, Long> {
 
     Optional<RewardItem> findById(Long id);
+
     Optional<List<RewardItem>> findAllByCreatedWhen(Timestamp createdWhen);
+
+    List<RewardItem> findAllByCreatedBy(Long createdBy);
+
+    @Query(value = "SELECT * FROM RewardItems WHERE PRICE BETWEEN ?1 AND ?2 ", nativeQuery = true)
+    List<RewardItem> findAllByPrice(Long from, Long to);
 }

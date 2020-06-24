@@ -6,7 +6,7 @@ import lombok.Data;
 public class RewardItemDTO {
 
     private String title;
-    private String createdBy;
+    private Long createdBy;
     private String description;
     private Long price;
     private byte[] content;
