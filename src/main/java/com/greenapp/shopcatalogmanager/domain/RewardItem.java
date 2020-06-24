@@ -36,4 +36,6 @@ public class RewardItem implements Serializable {
     private Long price;
     @Column
     private byte[] headerPhoto;
+    @Column
+    private boolean status;
 }

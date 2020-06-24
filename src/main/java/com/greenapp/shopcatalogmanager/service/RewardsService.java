@@ -24,7 +24,6 @@ import java.util.concurrent.CompletableFuture;
 public class RewardsService {
 
     private final RewardRepository rewardsRepository;
-
     private static final Logger LOG = LoggerFactory.getLogger(RewardsService.class.getName());
 
     @Async
@@ -41,6 +40,7 @@ public class RewardsService {
                 .lastUpdated(Timestamp.valueOf(now))
                 .createdBy(dto.getCreatedBy())
                 .title(dto.getTitle())
+                .status(Boolean.TRUE)
                 .build();
         LOG.info("Company {} added new reward item with title:{} and price:{}", dto.getCreatedBy(), dto.getTitle(), dto.getPrice());
         return ResponseEntity.ok(rewardsRepository.save(instance));
@@ -88,4 +88,16 @@ public class RewardsService {
                 .completedFuture(rewardsRepository
                         .findAllByPrice(dto.getFrom(), dto.getTo()));
     }
+    @Transactional
+    public void updateRewardStatus(Long rewardId, Boolean status) {
+        if (status) LOG.info("Updating item :{} status to ACTIVE ", rewardId);
+        else LOG.info("Updating item :{} status to SOLD", rewardId);
+        rewardsRepository.findById(rewardId)
+                .ifPresent(rewardItem -> {
+                    rewardItem.setStatus(status);
+
+                    rewardsRepository.save(rewardItem);
+                });
+    }
+
 }

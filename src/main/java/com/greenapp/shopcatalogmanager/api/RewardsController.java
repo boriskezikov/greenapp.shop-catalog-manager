@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -63,7 +64,13 @@ public class RewardsController {
 
     @Async
     @PostMapping("load/paginated")
-    public CompletableFuture<List<RewardItem>> filterByPriceRange(@RequestBody PriceRangeDTO dto){
+    public CompletableFuture<List<RewardItem>> filterByPriceRange(@RequestBody PriceRangeDTO dto) {
         return service.filterByPrice(dto);
     }
+
+    @PutMapping("update/{id}/status")
+    public void updateRewardStatus(@PathVariable Long id, @RequestParam Boolean status) {
+        service.updateRewardStatus(id, status);
+    }
+
 }
