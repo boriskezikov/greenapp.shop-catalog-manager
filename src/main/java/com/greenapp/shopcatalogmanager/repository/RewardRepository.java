@@ -19,6 +19,6 @@ public interface RewardRepository extends JpaRepository<RewardItem, Long> {
 
     List<RewardItem> findAllByCreatedBy(Long createdBy);
 
-    @Query(value = "SELECT * FROM RewardItems WHERE PRICE BETWEEN ?1 AND ?2 ", nativeQuery = true)
+    @Query(value = "SELECT * FROM reward_item WHERE PRICE BETWEEN ?1 AND ?2 ", nativeQuery = true)
     List<RewardItem> findAllByPrice(Long from, Long to);
 }
