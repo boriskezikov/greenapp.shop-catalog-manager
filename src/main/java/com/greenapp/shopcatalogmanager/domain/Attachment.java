@@ -23,6 +23,4 @@ public class Attachment {
     private Long contentLength;
     @Column
     private String contentType;
-    @Column
-    private byte[] content;
 }
