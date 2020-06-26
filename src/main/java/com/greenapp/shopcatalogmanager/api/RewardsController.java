@@ -49,9 +49,9 @@ public class RewardsController {
     }
 
     @Async
-    @PostMapping("load/filter")
-    public CompletableFuture<List<RewardItem>> loadItemsByFilter(@RequestBody FilterDTO filter) {
-        return service.filterCreatedDate(filter);
+    @PostMapping("load/by/date")
+    public CompletableFuture<List<RewardItem>> loadItemsByFilter(@RequestBody FilterDTO date) {
+        return service.filterCreatedDate(date);
     }
 
     @PutMapping("update/{itemId}")
@@ -66,7 +66,7 @@ public class RewardsController {
     }
 
     @Async
-    @PostMapping("load/paginated")
+    @PostMapping("load/price/range")
     public CompletableFuture<List<RewardItem>> filterByPriceRange(@RequestBody PriceRangeDTO dto) {
         return service.filterByPrice(dto);
     }

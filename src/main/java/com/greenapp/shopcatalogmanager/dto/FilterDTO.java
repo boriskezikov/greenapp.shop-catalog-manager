@@ -12,7 +12,5 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @Builder
 public class FilterDTO {
-    private Long price;
     private Timestamp createdWhen;
-    private Long companyId;
 }
