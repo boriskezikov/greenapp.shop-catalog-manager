@@ -37,7 +37,7 @@ public class RewardItem implements Serializable {
     @Column
     private byte[] headerPhoto;
     @Column
-    private boolean status;
+    private SoldStatus status;
     @Column
     private Integer amount;
 }

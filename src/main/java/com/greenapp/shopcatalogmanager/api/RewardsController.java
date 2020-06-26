@@ -1,11 +1,14 @@
 package com.greenapp.shopcatalogmanager.api;
 
 import com.greenapp.shopcatalogmanager.domain.RewardItem;
+import com.greenapp.shopcatalogmanager.domain.SoldStatus;
+import com.greenapp.shopcatalogmanager.dto.AssignDTO;
 import com.greenapp.shopcatalogmanager.dto.FilterDTO;
 import com.greenapp.shopcatalogmanager.dto.PriceRangeDTO;
 import com.greenapp.shopcatalogmanager.dto.RewardItemDTO;
 import com.greenapp.shopcatalogmanager.service.RewardsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,8 +72,7 @@ public class RewardsController {
     }
 
     @PutMapping("update/{id}/status")
-    public void updateRewardStatus(@PathVariable Long id, @RequestParam Boolean status) {
+    public void updateRewardStatus(@PathVariable Long id, @RequestParam SoldStatus status) {
         service.updateRewardStatus(id, status);
     }
-
 }
