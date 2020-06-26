@@ -9,4 +9,5 @@ public class RewardItemDTO {
     private Long createdBy;
     private String description;
     private Long price;
+    private int amount;
 }

@@ -40,6 +40,7 @@ public class RewardsService {
                 .lastUpdated(Timestamp.valueOf(now))
                 .createdBy(dto.getCreatedBy())
                 .title(dto.getTitle())
+                .amount(dto.getAmount())
                 .status(Boolean.TRUE)
                 .build();
         LOG.info("Company {} added new reward item with title:{} and price:{}", dto.getCreatedBy(), dto.getTitle(), dto.getPrice());
