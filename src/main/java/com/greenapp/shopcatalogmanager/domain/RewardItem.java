@@ -38,4 +38,6 @@ public class RewardItem implements Serializable {
     private byte[] headerPhoto;
     @Column
     private boolean status;
+    @Column
+    private Integer amount;
 }
