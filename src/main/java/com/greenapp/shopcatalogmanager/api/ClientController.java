@@ -21,13 +21,18 @@ public class ClientController {
 
     private final RewardsService service;
 
-    @PostMapping("sell/{rewardId}/to/{customerId}")
-    public CompletableFuture<ResponseEntity<HttpStatus>> assign(@PathVariable Long rewardId, @PathVariable Long customerId) {
-        return CompletableFuture.completedFuture(service.assign(rewardId, customerId));
+    @PostMapping("sell/{rewardId}/to/{clientId}")
+    public CompletableFuture<ResponseEntity<HttpStatus>> assign(@PathVariable Long rewardId, @PathVariable Long clientId) {
+        return CompletableFuture.completedFuture(service.assign(rewardId, clientId));
     }
 
     @GetMapping("{clientId}")
-    public CompletableFuture<List<RewardItem>> parseItemsByClient(@PathVariable Long clientId){
+    public CompletableFuture<List<RewardItem>> parseItemsByClient(@PathVariable Long clientId) {
         return CompletableFuture.completedFuture(service.parseClientItems(clientId));
+    }
+
+    @PostMapping("rollback/{clientId}/item/{rewardId}")
+    public CompletableFuture<ResponseEntity<HttpStatus>> rollbackReward(@PathVariable Long clientId, @PathVariable Long rewardId) {
+        return CompletableFuture.completedFuture(service.rollback(clientId, rewardId));
     }
 }

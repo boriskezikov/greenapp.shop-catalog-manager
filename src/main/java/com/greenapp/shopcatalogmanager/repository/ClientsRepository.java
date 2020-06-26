@@ -11,4 +11,6 @@ public interface ClientsRepository extends JpaRepository<ClientRewards, Long> {
 
     List<ClientRewards> findAllByClientId(Long clientId);
 
+    void deleteByClientIdAndRewardId(Long clientId, Long rewardId);
+
 }

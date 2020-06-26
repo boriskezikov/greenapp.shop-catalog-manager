@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -74,5 +75,10 @@ public class RewardsController {
     @PutMapping("update/{id}/status")
     public void updateRewardStatus(@PathVariable Long id, @RequestParam SoldStatus status) {
         service.updateRewardStatus(id, status);
+    }
+
+    @DeleteMapping("remove/{rewardId}")
+    public void removeItem(@PathVariable Long rewardId) {
+        service.removeItem(rewardId);
     }
 }

@@ -127,8 +127,8 @@ public class RewardsService {
         return ResponseEntity.ok(HttpStatus.ACCEPTED);
     }
 
-    public List<RewardItem> parseClientItems(Long customerId) {
-        var clientItemsIds = clientsRepository.findAllByClientId(customerId)
+    public List<RewardItem> parseClientItems(Long clientId) {
+        var clientItemsIds = clientsRepository.findAllByClientId(clientId)
                 .stream()
                 .map(ClientRewards::getRewardId)
                 .collect(Collectors.toList());
@@ -136,5 +136,20 @@ public class RewardsService {
             return rewardsRepository.findAllByIdIn(clientItemsIds);
         }
         return Collections.emptyList();
+    }
+
+    @Transactional
+    public ResponseEntity<HttpStatus> rollback(Long clientId, Long rewardId) {
+        clientsRepository.deleteByClientIdAndRewardId(clientId, rewardId);
+        var reward = rewardsRepository.findById(rewardId).orElseThrow(ItemNotFoundException::new);
+        reward.setStatus(SoldStatus.AVAILABLE);
+        reward.setAmount(reward.getAmount() + 1);
+        rewardsRepository.save(reward);
+        return ResponseEntity.ok(HttpStatus.ACCEPTED);
+    }
+
+    @Transactional
+    public void removeItem(Long itemId) {
+        rewardsRepository.deleteById(itemId);
     }
 }
