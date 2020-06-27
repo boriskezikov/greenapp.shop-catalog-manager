@@ -4,6 +4,7 @@ import com.greenapp.shopcatalogmanager.configuration.ItemNotFoundException;
 import com.greenapp.shopcatalogmanager.domain.ClientRewards;
 import com.greenapp.shopcatalogmanager.domain.RewardItem;
 import com.greenapp.shopcatalogmanager.domain.SoldStatus;
+import com.greenapp.shopcatalogmanager.dto.ClientMailDTO;
 import com.greenapp.shopcatalogmanager.dto.FilterDTO;
 import com.greenapp.shopcatalogmanager.dto.PriceRangeDTO;
 import com.greenapp.shopcatalogmanager.dto.RewardItemDTO;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -31,6 +34,7 @@ public class RewardsService {
 
     private final RewardRepository rewardsRepository;
     private final ClientsRepository clientsRepository;
+    private final MailService mailService;
     private static final Logger LOG = LoggerFactory.getLogger(RewardsService.class.getName());
 
     @Async
@@ -109,7 +113,7 @@ public class RewardsService {
     }
 
     @Transactional
-    public ResponseEntity<HttpStatus> assign(Long rewardId, Long customerId) {
+    public ResponseEntity<HttpStatus> assign(Long rewardId, Long clientId) {
         var reward = rewardsRepository.findById(rewardId)
                 .orElseThrow(ItemNotFoundException::new);
 
@@ -121,9 +125,11 @@ public class RewardsService {
         rewardsRepository.save(reward);
         clientsRepository.save(ClientRewards
                 .builder()
-                .clientId(customerId)
+                .clientId(clientId)
                 .rewardId(rewardId)
                 .build());
+
+        mailService.sendConfirmation(reward, clientId);
         return ResponseEntity.ok(HttpStatus.ACCEPTED);
     }
 
