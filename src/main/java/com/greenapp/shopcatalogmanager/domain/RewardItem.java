@@ -40,4 +40,13 @@ public class RewardItem implements Serializable {
     private SoldStatus status;
     @Column
     private Integer amount;
+
+
+    public void decrementAmount() {
+        this.amount -= 1;
+    }
+
+    public void incrementAmount() {
+        this.amount += 1;
+    }
 }

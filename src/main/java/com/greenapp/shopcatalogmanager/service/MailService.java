@@ -17,8 +17,8 @@ import static com.greenapp.shopcatalogmanager.configuration.MailTopics.REWARD_CO
 @RequiredArgsConstructor
 public class MailService {
     private final AuthClient authClient;
-//    private final KafkaTemplate<String, RewardMailDTO> kafkaTemplate;
-    private static final Logger log = LoggerFactory.getLogger(MailService.class.getName());
+    private final KafkaTemplate<String, RewardMailDTO> kafkaTemplate;
+    private static final Logger log = LoggerFactory.getLogger(MailService.class);
 
     public void sendConfirmation(RewardItem rewardItem, Long clientId) {
 
@@ -33,7 +33,7 @@ public class MailService {
                     .surname(clientDto.getSurname())
                     .build();
 
-//            kafkaTemplate.send(REWARD_CONFIRMATION, rewardMail);
+            kafkaTemplate.send(REWARD_CONFIRMATION, rewardMail);
             log.info("Confirmation sent to {}", rewardMail.getMailAddress());
         }
     }

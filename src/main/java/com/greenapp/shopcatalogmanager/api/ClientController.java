@@ -15,11 +15,11 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("shop/client/")
+@RequiredArgsConstructor
 public class ClientController {
 
-    private final RewardsService service;
+    private final RewardsService service ;
 
     @PostMapping("sell/{rewardId}/to/{clientId}")
     public CompletableFuture<ResponseEntity<HttpStatus>> assign(@PathVariable Long rewardId, @PathVariable Long clientId) {

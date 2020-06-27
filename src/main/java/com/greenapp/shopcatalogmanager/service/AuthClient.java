@@ -15,13 +15,16 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.greenapp.shopcatalogmanager.configuration.ShopConfig.AUTH_URI;
+import static com.greenapp.shopcatalogmanager.configuration.ShopConfig.CLIENT_INFO;
+import static com.greenapp.shopcatalogmanager.configuration.ShopConfig.getAuthHeaders;
+
 @Service
 @RequiredArgsConstructor
 public class AuthClient {
 
-    private static final String AUTH_URI = "https://greenapp-auth-service.herokuapp.com/auth";
-    private static final String CLIENT_INFO = "/clients/{clientId}";
-    private static final Logger log = LoggerFactory.getLogger(AuthClient.class.getName());
+
+    private static final Logger log = LoggerFactory.getLogger(AuthClient.class);
     private final RestTemplate restTemplate;
 
 
@@ -31,7 +34,7 @@ public class AuthClient {
         uriParams.put("clientId", clientId);
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(AUTH_URI + CLIENT_INFO);
-        HttpEntity<?> entity = new HttpEntity<>(authHeaders());
+        HttpEntity<?> entity = new HttpEntity<>(getAuthHeaders());
         log.warn("Beginning request to get client: " + entity);
 
         ResponseEntity<ClientMailDTO> response = restTemplate.exchange(
@@ -42,11 +45,4 @@ public class AuthClient {
 
         return response.getBody();
     }
-
-    private HttpHeaders authHeaders() {
-        var headers = new HttpHeaders();
-        headers.set("X-GREEN-APP-ID", "GREEN");
-        return headers;
-    }
-
 }

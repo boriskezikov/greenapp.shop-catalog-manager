@@ -1,13 +1,15 @@
 package com.greenapp.shopcatalogmanager.service;
 
+import com.greenapp.shopcatalogmanager.ShopCatalogManagerApplication;
+import com.greenapp.shopcatalogmanager.configuration.ExceededAmountException;
 import com.greenapp.shopcatalogmanager.configuration.ItemNotFoundException;
 import com.greenapp.shopcatalogmanager.domain.ClientRewards;
 import com.greenapp.shopcatalogmanager.domain.RewardItem;
 import com.greenapp.shopcatalogmanager.domain.SoldStatus;
-import com.greenapp.shopcatalogmanager.dto.ClientMailDTO;
 import com.greenapp.shopcatalogmanager.dto.FilterDTO;
 import com.greenapp.shopcatalogmanager.dto.PriceRangeDTO;
 import com.greenapp.shopcatalogmanager.dto.RewardItemDTO;
+import com.greenapp.shopcatalogmanager.dto.WriteOffDTO;
 import com.greenapp.shopcatalogmanager.repository.ClientsRepository;
 import com.greenapp.shopcatalogmanager.repository.RewardRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -34,8 +34,10 @@ public class RewardsService {
 
     private final RewardRepository rewardsRepository;
     private final ClientsRepository clientsRepository;
+    private final BillingClient billingClient;
     private final MailService mailService;
-    private static final Logger LOG = LoggerFactory.getLogger(RewardsService.class.getName());
+
+    private static final Logger LOG = LoggerFactory.getLogger(RewardsService.class);
 
     @Async
     public CompletableFuture<List<RewardItem>> loadAllItems() {
@@ -118,10 +120,20 @@ public class RewardsService {
                 .orElseThrow(ItemNotFoundException::new);
 
         if (reward.getAmount() <= 0) {
-            throw new RuntimeException("Amount of this item is 0!");
+            throw new ExceededAmountException();
         }
+
+        billingClient.withdrawFunds(WriteOffDTO
+                .builder()
+                .amount(reward.getPrice())
+                .clientId(clientId)
+                .initiator(ShopCatalogManagerApplication.class.getCanonicalName())
+                .build()
+        );
+
         reward.setStatus(SoldStatus.SOLD);
-        reward.setAmount(reward.getAmount() - 1);
+        reward.decrementAmount();
+
         rewardsRepository.save(reward);
         clientsRepository.save(ClientRewards
                 .builder()
@@ -149,7 +161,7 @@ public class RewardsService {
         clientsRepository.deleteByClientIdAndRewardId(clientId, rewardId);
         var reward = rewardsRepository.findById(rewardId).orElseThrow(ItemNotFoundException::new);
         reward.setStatus(SoldStatus.AVAILABLE);
-        reward.setAmount(reward.getAmount() + 1);
+        reward.incrementAmount();
         rewardsRepository.save(reward);
         return ResponseEntity.ok(HttpStatus.ACCEPTED);
     }
